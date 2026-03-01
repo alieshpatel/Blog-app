@@ -1,4 +1,3 @@
-import React from 'react'
 import { useCurrentUser } from '../../hooks/userHooks'
 
 const Profile = () => {
