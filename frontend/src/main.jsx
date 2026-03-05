@@ -7,6 +7,7 @@ import Newblog from "./pages/Newblog.jsx";
 import Allblogs from "./pages/Allblogs.jsx";
 import Editblog from "./pages/Editblog.jsx";
 import Profile from "./pages/Profile.jsx";
+import SingleBlog from "./pages/SingleBlog.jsx";
 import { ClerkProvider } from "@clerk/clerk-react";
 import Myblog from "./pages/Myblog.jsx";
 
@@ -28,9 +29,10 @@ createRoot(document.getElementById("root")).render(
           <Route path="/" element={<App />} />
           <Route path="/new" element={<Newblog />} />
           <Route path="/all" element={<Allblogs />} />
+          <Route path="/blog/:id" element={<SingleBlog />} />
           <Route path="/edit/:id" element={<Editblog />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/myblog" element={<Myblog />} />
+          <Route path="/my" element={<Myblog />} />
         </Routes>
       </BrowserRouter>
     </ClerkProvider>

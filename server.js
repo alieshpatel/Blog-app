@@ -7,6 +7,7 @@ async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/test");
 }
 
+//schema definition
 const blogSchema = new mongoose.Schema({
   title: String,
   descripion: String,
@@ -19,24 +20,26 @@ const Blog = mongoose.model("Blog", blogSchema);
 app.use(express.json());
 app.use(cors());
 
+//server setup
 app.listen(3000, async () => {
   console.log("server is started");
   await main();
   console.log("mongo connected");
 });
 
+//root page
 app.get("/", async (req, res) => {
   res.send("welcome to backend of blog-app");
 });
 
-// get all blogs
+//get all blogs
 app.get("/allblog", async (req, res) => {
   const allBlog = await Blog.find();
   console.log(allBlog);
   res.json({ allBlog });
 });
 
-// get blogs by id
+//get blogs by id
 app.get("/blog/:id", async (req, res) => {
   const { id } = req.params;
   const singleBlog = await Blog.findById(id);
@@ -68,10 +71,10 @@ app.post("/blog/update", async (req, res) => {
   res.json({ msg: "Updated" });
 });
 
+//my blog 
 app.post("/myblog", async (req, res) => {
   const {email} = req.body;
   const myblog = await Blog.find({email})
-  // console.log(myblog);
   res.json({myblog})
   
 });
