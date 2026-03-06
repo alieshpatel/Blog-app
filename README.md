@@ -28,7 +28,6 @@ This project is designed for beginners to understand CRUD operations and full-st
 - MongoDB
 - Mongoose
 
----
 
 
 ---
