@@ -17,7 +17,7 @@ const Profile = () => {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 py-12 px-4 sm:px-6 lg:px-8">
+            <div className="min-h-screen bg-white from-slate-900 to-slate-800 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl mx-auto">
                 {/* Profile Card */}
                 <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-700">
@@ -62,7 +62,7 @@ const Profile = () => {
                         <div className="grid grid-cols-2 gap-4 mb-8 py-8 border-y border-slate-700">
                             <div className="text-center">
                                 <p className="text-gray-400 text-sm mb-1">Member Since</p>
-                                <p className="text-xl font-bold text-white">2024</p>
+                                <p className="text-xl font-bold text-white">2026</p>
                             </div>
                             <div className="text-center">
                                 <p className="text-gray-400 text-sm mb-1">Status</p>
@@ -95,7 +95,7 @@ const Profile = () => {
                         {/* Footer Info */}
                         <div className="mt-8 pt-8 border-t border-slate-700">
                             <p className="text-gray-400 text-center text-sm">
-                                Welcome to BlogHub! <br/>
+                                Welcome to BlogSphere! <br/>
                                 <span className="text-gray-500">Share your stories and inspire others</span>
                             </p>
                         </div>

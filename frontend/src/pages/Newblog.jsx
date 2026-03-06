@@ -26,14 +26,14 @@ const Newblog = () => {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-white from-slate-900 via-blue-900 to-slate-900 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-blue-150 mb-4">
               Create New Story
             </h1>
-            <p className="text-blue-200 text-lg">
+            <p className="text-blue-150 text-lg">
               Share your thoughts with the world
             </p>
           </div>
@@ -44,7 +44,7 @@ const Newblog = () => {
               
               {/* Title Input */}
               <div>
-                <label className="block text-white font-semibold mb-3">
+                <label className="block text-black font-semibold mb-3">
                   Blog Title
                 </label>
                 <input
@@ -59,7 +59,7 @@ const Newblog = () => {
 
               {/* Description Input */}
               <div>
-                <label className="block text-white font-semibold mb-3">
+                <label className="block text-black font-semibold mb-3">
                   Description
                 </label>
                 <textarea
@@ -75,7 +75,7 @@ const Newblog = () => {
 
               {/* Image URL Input */}
               <div>
-                <label className="block text-white font-semibold mb-3">
+                <label className="block text-black font-semibold mb-3">
                   Image URL
                 </label>
                 <input
@@ -99,7 +99,7 @@ const Newblog = () => {
                 <button
                   type="button"
                   onClick={() => navigate("/all")}
-                  className="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 border border-white/20"
+                  className="flex-1 bg-black/10 hover:bg-black/20 text-black font-bold py-3 px-6 rounded-xl transition-all duration-200 border border-white/20"
                 >
                   Cancel
                 </button>

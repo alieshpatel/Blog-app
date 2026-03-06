@@ -4,16 +4,19 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router"
 import { useCurrentUser } from "../../hooks/userHooks"
 import Navbar from "../components/Navbar"
+import { useUser } from "@clerk/clerk-react"
+
 const Allblogs = () => {
 
     const [allblogs, setallblogs] = useState()
     const navigate = useNavigate()
+    const { user } = useUser()
 
     //clerk call from hooks folder
     const {email,fullName} = useCurrentUser()
    
     useEffect(() => {
-        console.log(email,fullName)
+        // User data loaded
     }, [email]) 
 
 

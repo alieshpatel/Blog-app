@@ -24,7 +24,6 @@ const SingleBlog = () => {
       setError(null)
     } catch (err) {
       setError("Failed to load blog")
-      console.error(err)
     } finally {
       setLoading(false)
     }

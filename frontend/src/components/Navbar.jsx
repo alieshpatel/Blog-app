@@ -53,7 +53,7 @@ const Navbar = () => {
           {/* Right Section */}
           <div className="flex items-center gap-4">
             <SignedOut>
-              <SignUpButton mode="modal">
+              <SignUpButton mode="modal" redirectUrl="/all">
                 <button className="text-gray-600 hover:text-gray-900 font-medium">Sign In</button>
               </SignUpButton>
             </SignedOut>

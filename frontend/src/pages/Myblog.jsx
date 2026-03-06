@@ -19,7 +19,6 @@ const Myblog = () => {
     const response = await axios.post("http://localhost:3000/myblog", {
       email,
     });
-    console.log(response);
     setallblogs(response.data.myblog);
   };
 

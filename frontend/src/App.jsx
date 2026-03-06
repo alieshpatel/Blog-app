@@ -3,11 +3,296 @@ import {
   SignedOut,
   SignUpButton,
   UserButton,
+  useUser,
 } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+
+function BlogHeroAnimation() {
+  const canvasRef = useRef(null);
+  const animRef = useRef(null);
+  const particlesRef = useRef([]);
+  const [tick, setTick] = useState(0);
+
+  const cards = [
+    { title: "Design Systems", tag: "Design", color: "#6366f1", delay: 0 },
+    { title: "React Patterns", tag: "Code", color: "#ec4899", delay: 0.3 },
+    { title: "Typography", tag: "Art", color: "#f59e0b", delay: 0.6 },
+    { title: "AI & Writing", tag: "Trends", color: "#10b981", delay: 0.9 },
+  ];
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    const W = canvas.width;
+    const H = canvas.height;
+
+    particlesRef.current = Array.from({ length: 38 }, (_, i) => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 2.2 + 0.4,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      alpha: Math.random() * 0.5 + 0.15,
+      hue: [240, 310, 45, 160][i % 4],
+    }));
+
+    let frame = 0;
+    const loop = () => {
+      ctx.clearRect(0, 0, W, H);
+      frame++;
+      particlesRef.current.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = W;
+        if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H;
+        if (p.y > H) p.y = 0;
+        const pulse = Math.sin(frame * 0.018 + i * 0.7) * 0.18;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue}, 80%, 65%, ${Math.max(0.05, p.alpha + pulse)})`;
+        ctx.fill();
+        particlesRef.current.slice(i + 1).forEach((q) => {
+          const dx = p.x - q.x, dy = p.y - q.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 72) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.strokeStyle = `hsla(${p.hue}, 70%, 70%, ${0.12 * (1 - dist / 72)})`;
+            ctx.lineWidth = 0.7;
+            ctx.stroke();
+          }
+        });
+      });
+      animRef.current = requestAnimationFrame(loop);
+    };
+    loop();
+    return () => cancelAnimationFrame(animRef.current);
+  }, []);
+
+  useEffect(() => {
+    const id = setInterval(() => setTick((t) => t + 1), 50);
+    return () => clearInterval(id);
+  }, []);
+
+  const t = tick * 0.05;
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        aspectRatio: "1 / 1",
+        borderRadius: "24px",
+        overflow: "hidden",
+        background: "linear-gradient(135deg, #0f0f1a 0%, #1a0f2e 50%, #0f1a1a 100%)",
+        boxShadow: "0 32px 80px rgba(0,0,0,0.5)",
+      }}
+    >
+      <canvas
+        ref={canvasRef}
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+      />
+
+      {[
+        { x: 25, y: 30, color: "99,102,241", size: 180 },
+        { x: 72, y: 65, color: "236,72,153", size: 140 },
+        { x: 50, y: 80, color: "16,185,129", size: 100 },
+      ].map((orb, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            left: `${orb.x}%`,
+            top: `${orb.y}%`,
+            width: orb.size,
+            height: orb.size,
+            transform: `translate(-50%, -50%) scale(${1 + 0.08 * Math.sin(t + i * 2.1)})`,
+            borderRadius: "50%",
+            background: `radial-gradient(circle, rgba(${orb.color},0.22) 0%, transparent 70%)`,
+            transition: "transform 0.05s linear",
+            pointerEvents: "none",
+          }}
+        />
+      ))}
+
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          width: 160,
+          height: 160,
+          transform: `translate(-50%, -50%) rotate(${t * 18}deg)`,
+          borderRadius: "50%",
+          border: "1.5px solid rgba(255,255,255,0.07)",
+          boxShadow: "0 0 0 1px rgba(99,102,241,0.18)",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: -4,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            background: "#818cf8",
+            boxShadow: "0 0 12px 3px rgba(129,140,248,0.7)",
+          }}
+        />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          width: 220,
+          height: 220,
+          transform: `translate(-50%, -50%) rotate(${-t * 11}deg)`,
+          borderRadius: "50%",
+          border: "1px dashed rgba(236,72,153,0.2)",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: -5,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 10,
+            height: 10,
+            borderRadius: "50%",
+            background: "#f472b6",
+            boxShadow: "0 0 14px 4px rgba(244,114,182,0.6)",
+          }}
+        />
+      </div>
+
+      {cards.map((card, i) => {
+        const angle = (i / cards.length) * Math.PI * 2 + t * 0.22;
+        const radiusX = 115;
+        const radiusY = 88;
+        const cx = 50 + (radiusX / 2) * Math.cos(angle);
+        const cy = 50 + (radiusY / 2) * Math.sin(angle);
+        const floatY = Math.sin(t * 1.1 + card.delay * 6) * 5;
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: `${cx}%`,
+              top: `calc(${cy}% + ${floatY}px)`,
+              transform: "translate(-50%, -50%)",
+              background: "rgba(255,255,255,0.06)",
+              backdropFilter: "blur(12px)",
+              border: `1px solid rgba(255,255,255,0.1)`,
+              borderRadius: 12,
+              padding: "8px 12px",
+              minWidth: 100,
+              boxShadow: `0 4px 24px rgba(0,0,0,0.3), 0 0 0 1px ${card.color}22`,
+              pointerEvents: "none",
+            }}
+          >
+            <div
+              style={{
+                fontSize: 9,
+                fontWeight: 700,
+                color: card.color,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                marginBottom: 3,
+                fontFamily: "monospace",
+              }}
+            >
+              {card.tag}
+            </div>
+            <div
+              style={{
+                fontSize: 11,
+                color: "rgba(255,255,255,0.85)",
+                fontWeight: 600,
+                fontFamily: "Georgia, serif",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {card.title}
+            </div>
+            <div
+              style={{
+                marginTop: 5,
+                height: 1.5,
+                borderRadius: 2,
+                background: `linear-gradient(90deg, ${card.color}, transparent)`,
+                width: `${60 + 30 * Math.sin(t + i)}%`,
+                transition: "width 0.05s linear",
+              }}
+            />
+          </div>
+        );
+      })}
+
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: `translate(-50%, -50%) scale(${1 + 0.05 * Math.sin(t * 1.5)})`,
+          width: 52,
+          height: 52,
+          borderRadius: "50%",
+          background: "linear-gradient(135deg, #6366f1, #ec4899)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: "0 0 30px rgba(99,102,241,0.5), 0 0 60px rgba(236,72,153,0.2)",
+        }}
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          <path
+            d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px)",
+          pointerEvents: "none",
+          borderRadius: "inherit",
+        }}
+      />
+    </div>
+  );
+}
 
 function App() {
   const navigate = useNavigate();
+  const { user, isLoaded } = useUser();
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      navigate("/all");
+    }
+  }, [isLoaded, user, navigate]);
 
   const features = [
     {
@@ -84,18 +369,10 @@ function App() {
             </div>
 
             <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-gray-600 hover:text-gray-900 font-medium transition">
-                Features
-              </a>
-              <a href="#stats" className="text-gray-600 hover:text-gray-900 font-medium transition">
-                Stats
-              </a>
-              <a href="#testimonials" className="text-gray-600 hover:text-gray-900 font-medium transition">
-                Testimonials
-              </a>
-              <a href="#pricing" className="text-gray-600 hover:text-gray-900 font-medium transition">
-                Pricing
-              </a>
+              <a href="#features" className="text-gray-600 hover:text-gray-900 font-medium transition">Features</a>
+              <a href="#stats" className="text-gray-600 hover:text-gray-900 font-medium transition">Stats</a>
+              <a href="#testimonials" className="text-gray-600 hover:text-gray-900 font-medium transition">Testimonials</a>
+              <a href="#pricing" className="text-gray-600 hover:text-gray-900 font-medium transition">Pricing</a>
             </div>
 
             <div className="flex items-center gap-3">
@@ -161,19 +438,10 @@ function App() {
                 ))}
               </div>
             </div>
+
+            {/* ✅ Replaced static SVG with live animation */}
             <div className="relative">
-              <div className="bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl aspect-square flex items-center justify-center">
-                <svg className="w-3/4 h-3/4" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="100" cy="100" r="80" stroke="url(#grad1)" strokeWidth="2"/>
-                  <path d="M60 80 L140 80 L140 140 L60 140 Z" stroke="url(#grad1)" strokeWidth="2"/>
-                  <defs>
-                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#2563eb"/>
-                      <stop offset="100%" stopColor="#a855f7"/>
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>
+              <BlogHeroAnimation />
             </div>
           </div>
         </div>
@@ -186,7 +454,6 @@ function App() {
             <h3 className="text-4xl md:text-5xl font-bold mb-4">Powerful Features for Creators</h3>
             <p className="text-xl text-gray-600">Everything you need to write, publish, and grow</p>
           </div>
-
           <div className="grid md:grid-cols-3 gap-8">
             {features.map((feature, idx) => (
               <div key={idx} className="p-8 bg-white rounded-2xl border border-gray-200 hover:border-blue-300 transition-all hover:shadow-xl">
@@ -205,7 +472,6 @@ function App() {
           <div className="text-center mb-16">
             <h3 className="text-4xl md:text-5xl font-bold">Trusted by Creators Worldwide</h3>
           </div>
-
           <div className="grid md:grid-cols-4 gap-8">
             {stats.map((stat, idx) => (
               <div key={idx} className="text-center">
@@ -224,7 +490,6 @@ function App() {
             <h3 className="text-4xl md:text-5xl font-bold mb-4">Loved by Creators</h3>
             <p className="text-xl text-gray-600">See what our community says</p>
           </div>
-
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, idx) => (
               <div key={idx} className="p-8 bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl border border-gray-200">
@@ -251,7 +516,6 @@ function App() {
             <h3 className="text-4xl md:text-5xl font-bold mb-4">Simple, Transparent Pricing</h3>
             <p className="text-xl text-gray-600">Choose the plan that works for you</p>
           </div>
-
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { name: "Starter", price: "Free", features: ["5 Published Blogs", "Basic Analytics", "Community Support"] },
@@ -272,7 +536,7 @@ function App() {
                   ))}
                 </ul>
                 <SignedOut>
-                  <SignUpButton mode="modal">
+                  <SignUpButton mode="modal" redirectUrl="/all">
                     <button className="w-full py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition">
                       Get Started
                     </button>
@@ -299,7 +563,7 @@ function App() {
           <p className="text-xl mb-8 opacity-90">Join thousands of creators and start publishing today. It takes less than 2 minutes to get started.</p>
           <div className="flex gap-4 justify-center flex-wrap">
             <SignedOut>
-              <SignUpButton mode="modal">
+              <SignUpButton mode="modal" redirectUrl="/all">
                 <button className="px-8 py-4 bg-white text-blue-600 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all hover:scale-105">
                   Start Free Trial
                 </button>

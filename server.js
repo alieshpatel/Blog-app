@@ -22,9 +22,7 @@ app.use(cors());
 
 //server setup
 app.listen(3000, async () => {
-  console.log("server is started");
   await main();
-  console.log("mongo connected");
 });
 
 //root page
@@ -35,7 +33,6 @@ app.get("/", async (req, res) => {
 //get all blogs
 app.get("/allblog", async (req, res) => {
   const allBlog = await Blog.find();
-  console.log(allBlog);
   res.json({ allBlog });
 });
 
